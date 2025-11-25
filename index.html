@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grana Zero - Inteligência Financeira Estudantil</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loading" class="loading">
+        <div class="neon-loader">
+            <div class="loader-circle"></div>
+            <div class="loader-text">Grana Zero</div>
+        </div>
+    </div>
+
+    <div class="floating-particles" id="particles"></div>
+
+    <header class="glass-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" data-aos="fade-right">
+                    <i class="fas fa-brain"></i>
+                    <span>Grana Zero</span>
+                    <div class="ai-badge">AI</div>
+                </div>
+                
+                <nav class="nav-desktop">
+                    <ul>
+                        <li><a href="#home" class="nav-link active">Início</a></li>
+                        <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+                        <li><a href="#ai" class="nav-link">AI Insights</a></li>
+                        <li><a href="#features" class="nav-link">Funcionalidades</a></li>
+                        <li><a href="#community" class="nav-link">Comunidade</a></li>
+                    </ul>
+                </nav>
+
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="btn-login">Entrar</button>
+                    <button class="btn-register" onclick="window.location.href='formulario-usuario.html'">
+                        Cadastrar
+                    </button>
+                    <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="mobile-nav" id="mobileNav">
+        <ul>
+            <li><a href="#home" class="nav-link active">Início</a></li>
+            <li><a href="#dashboard" class="nav-link">Dashboard</a></li>
+            <li><a href="#ai" class="nav-link">AI Insights</a></li>
+            <li><a href="#features" class="nav-link">Funcionalidades</a></li>
+            <li><a href="#community" class="nav-link">Comunidade</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-background">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text" data-aos="fade-up">
+                    <h1 class="gradient-text">
+                        Gerencie <span class="typing" id="typing"></span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        Plataforma inteligente que vai transformar sua vida financeira. 
+                        Visualizações 3D, insights preditivos e automação completa.
+                    </p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" data-count="1542">0</div>
+                            <div class="stat-label">Estudantes Ativos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" data-count="287">0</div>
+                            <div class="stat-label">AI Insights Gerados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" data-count="98">0</div>
+                            <div class="stat-label">Economia Média (%)</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button class="btn-primary btn-glow">
+                            <i class="fas fa-rocket"></i>
+                            Começar Agora
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-play-circle"></i>
+                            Ver Demo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="hero-visual" data-aos="fade-left">
+                    <div class="ai-dashboard-preview">
+                        <div class="dashboard-glass">
+                            <div class="dashboard-header">
+                                <div class="pulse-dot"></div>
+                                <span>AI Finance Dashboard</span>
+                            </div>
+                            <div class="chart-3d-container">
+                                <canvas id="heroChart"></canvas>
+                            </div>
+                            <div class="ai-insight">
+                                <i class="fas fa-robot"></i>
+                                <span>AI: Sugerimos reduzir delivery em 30%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="dashboard-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Dashboard Inteligente</h2>
+                <p>Visualizações em tempo real com análise preditiva</p>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card main-chart">
+                    <div class="card-header">
+                        <h3>Análise de Gastos 3D</h3>
+                        <div class="time-filter">
+                            <select class="neon-select">
+                                <option>Últimos 7 dias</option>
+                                <option>Este Mês</option>
+                                <option>Trimestre</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="mainChart3D"></canvas>
+                    </div>
+                </div>
+
+                <div class="dashboard-sidebar">
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">R$ 1.847</div>
+                            <div class="metric-label">Saldo Disponível</div>
+                            <div class="metric-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                12% vs mês anterior
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">R$ 2.150</div>
+                            <div class="metric-label">Receita Total</div>
+                            <div class="metric-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                                8% vs mês anterior
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-value">R$ 1.230</div>
+                            <div class="metric-label">Meta de Economia</div>
+                            <div class="metric-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 65%"></div>
+                                </div>
+                                <span>65%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="ai" class="ai-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Insights de IA</h2>
+                <p>Análise preditiva e recomendações inteligentes</p>
+            </div>
+
+            <div class="ai-grid">
+                <div class="ai-card">
+                    <div class="ai-card-header">
+                        <i class="fas fa-robot"></i>
+                        <h3>Previsão de Gastos</h3>
+                    </div>
+                    <div class="ai-card-content">
+                        <div class="prediction-chart">
+                            <canvas id="predictionChart"></canvas>
+                        </div>
+                        <div class="ai-insight-text">
+                            Baseado no seu histórico, prevemos um aumento de 15% em gastos com entretenimento este mês.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ai-card">
+                    <div class="ai-card-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Otimização Automática</h3>
+                    </div>
+                    <div class="ai-card-content">
+                        <div class="optimization-list">
+                            <div class="optimization-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Reduzir assinaturas não utilizadas: R$ 89/mês</span>
+                            </div>
+                            <div class="optimization-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Revisar planos de telefonia: Economia potencial R$ 45/mês</span>
+                            </div>
+                            <div class="optimization-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Otimizar gastos com delivery: Economia R$ 120/mês</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Pronto para Revolucionar suas Finanças?</h2>
+                <p>Junte-se à nova geração de estudantes financeiramente inteligentes</p>
+                <button class="btn-primary btn-large btn-glow">
+                    <i class="fas fa-bolt"></i>
+                    Começar Agora - 100% Gratuito
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="logo">
+                        <i class="fas fa-brain"></i>
+                        <span>Grana Zero</span>
+                    </div>
+                    <p>Organização financeira de estudantes</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Produto</h4>
+                    <ul>
+                        <li><a href="#">Recursos</a></li>
+                        <li><a href="#">AI Insights</a></li>
+                        <li><a href="#">Dashboard</a></li>
+                        <li><a href="#">Compartilhamento</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Tutoriais</a></li>
+                        <li><a href="#">Comunidade</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Grana Zero. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
