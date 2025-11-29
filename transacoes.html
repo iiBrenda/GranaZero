@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transações - Grana Zero</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #8b5cf6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 30px rgba(99, 102, 241, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .sidebar-header i {
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-header span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: var(--gray-light);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--glass-bg);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-profile {
+            margin-top: auto;
+            padding: 15px;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: var(--gray-light);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Filtros */
+        .filters-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 150px;
+        }
+
+        .filter-label {
+            font-size: 0.9rem;
+            color: var(--gray-light);
+            font-weight: 500;
+        }
+
+        .filter-select, .filter-input {
+            padding: 10px 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--light);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Tabela de Transações */
+        .transactions-container {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .transactions-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .transactions-table th {
+            text-align: left;
+            padding: 15px;
+            color: var(--gray);
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .transactions-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .transaction-item:hover {
+            background: var(--glass-bg);
+        }
+
+        .transaction-category {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--glass-bg);
+            font-size: 1.1rem;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .income-amount { 
+            color: var(--secondary);
+        }
+
+        .expense-amount { 
+            color: var(--danger);
+        }
+
+        .transaction-date {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .transaction-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+        }
+
+        .btn-icon:hover {
+            background: var(--glass-bg);
+            color: var(--light);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--gray-light);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .filters-container {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-brain"></i>
+                <span>Grana Zero</span>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Principal</h3>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="transacoes.html" class="active"><i class="fas fa-exchange-alt"></i> Transações</a></li>
+                    <li><a href="orcamentos.html"><i class="fas fa-chart-pie"></i> Orçamentos</a></li>
+                    <li><a href="metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Análise</h3>
+                <ul class="nav-links">
+                    <li><a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Gráficos</a></li>
+                    <li><a href="#"><i class="fas fa-robot"></i> AI Insights</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Social</h3>
+                <ul class="nav-links">
+                    <li><a href="amigos.html"><i class="fas fa-users"></i> Amigos</a></li>
+                    <li><a href="#"><i class="fas fa-share-alt"></i> Compartilhar</a></li>
+                    <li><a href="#"><i class="fas fa-trophy"></i> Desafios</a></li>
+                </ul>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="userName">Usuário</h4>
+                    <p>Ver perfil</p>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <h1>Transações</h1>
+                    <p>Gerencie todas as suas receitas e despesas</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openTransactionModal()">
+                        <i class="fas fa-plus"></i>
+                        Nova Transação
+                    </button>
+                </div>
+            </header>
+
+            <!-- Filtros -->
+            <div class="filters-container">
+                <div class="filter-group">
+                    <label class="filter-label">Tipo</label>
+                    <select class="filter-select" id="filterType">
+                        <option value="">Todos</option>
+                        <option value="income">Receitas</option>
+                        <option value="expense">Despesas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Categoria</label>
+                    <select class="filter-select" id="filterCategory">
+                        <option value="">Todas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Data Inicial</label>
+                    <input type="date" class="filter-input" id="filterStartDate">
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">Data Final</label>
+                    <input type="date" class="filter-input" id="filterEndDate">
+                </div>
+            </div>
+
+            <!-- Tabela de Transações -->
+            <div class="transactions-container">
+                <div class="transactions-header">
+                    <h3>Histórico de Transações</h3>
+                </div>
+                
+                <table class="transactions-table">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Categoria</th>
+                            <th>Valor</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsTableBody">
+                        <!-- As transações serão carregadas aqui -->
+                    </tbody>
+                </table>
+
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <i class="fas fa-receipt"></i>
+                    <h3>Nenhuma transação encontrada</h3>
+                    <p>Comece adicionando sua primeira transação</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Nova Transação -->
+    <div class="modal" id="transactionModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeTransactionModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="modal-title" id="modalTitle">Nova Transação</h3>
+            <form id="transactionForm">
+                <input type="hidden" id="transactionId">
+                <div class="form-group">
+                    <label class="form-label" for="description">Descrição</label>
+                    <input type="text" id="description" class="form-input" placeholder="Ex: Almoço, Salário..." required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="amount">Valor (R$)</label>
+                    <input type="number" id="amount" class="form-input" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="type">Tipo</label>
+                    <select id="type" class="form-select" required>
+                        <option value="">Selecione...</option>
+                        <option value="income">Receita</option>
+                        <option value="expense">Despesa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="category">Categoria</label>
+                    <select id="category" class="form-select" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="date">Data</label>
+                    <input type="date" id="date" class="form-input" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeTransactionModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Transação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentEditingId = null;
+        let categories = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadUserData();
+            loadCategories();
+            loadTransactions();
+            setupEventListeners();
+        });
+
+        function checkAuthentication() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        async function loadCategories() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/categories', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    categories = data.data.categories;
+                    populateCategorySelects();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        }
+
+        function populateCategorySelects() {
+            const modalSelect = document.getElementById('category');
+            const filterSelect = document.getElementById('filterCategory');
+            
+            modalSelect.innerHTML = '<option value="">Selecione...</option>';
+            filterSelect.innerHTML = '<option value="">Todas</option>';
+            
+            categories.forEach(category => {
+                const option1 = document.createElement('option');
+                option1.value = category.id;
+                option1.textContent = category.name;
+                modalSelect.appendChild(option1);
+
+                const option2 = document.createElement('option');
+                option2.value = category.id;
+                option2.textContent = category.name;
+                filterSelect.appendChild(option2);
+            });
+        }
+
+        async function loadTransactions() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/transactions', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    displayTransactions(data.data.transactions);
+                }
+            } catch (error) {
+                console.error('Erro ao carregar transações:', error);
+            }
+        }
+
+        function displayTransactions(transactions) {
+            const tableBody = document.getElementById('transactionsTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (transactions.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            tableBody.innerHTML = '';
+
+            transactions.forEach(transaction => {
+                const row = document.createElement('tr');
+                row.className = 'transaction-item';
+                
+                const amountClass = transaction.type === 'income' ? 'income-amount' : 'expense-amount';
+                const amountPrefix = transaction.type === 'income' ? '+' : '-';
+                const category = categories.find(c => c.id === transaction.category);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="transaction-category">
+                            <div class="category-icon" style="background: ${category?.color || '#6366f1'}20; color: ${category?.color || '#6366f1'}">
+                                <i class="fas ${getCategoryIcon(transaction.category)}"></i>
+                            </div>
+                            <div>
+                                <div style="font-weight: 500;">${transaction.description}</div>
+                                <div style="font-size: 0.8rem; color: var(--gray);">${transaction.paymentMethod || 'Dinheiro'}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${category?.name || transaction.category}</td>
+                    <td class="transaction-amount ${amountClass}">
+                        ${amountPrefix} R$ ${transaction.amount.toFixed(2)}
+                    </td>
+                    <td class="transaction-date">
+                        ${formatDate(transaction.date)}
+                    </td>
+                    <td>
+                        <div class="transaction-actions">
+                            <button class="btn-icon" onclick="editTransaction('${transaction.id}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon" onclick="deleteTransaction('${transaction.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function openTransactionModal() {
+            currentEditingId = null;
+            document.getElementById('modalTitle').textContent = 'Nova Transação';
+            document.getElementById('transactionForm').reset();
+            document.getElementById('transactionModal').classList.add('show');
+            document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        }
+
+        function closeTransactionModal() {
+            document.getElementById('transactionModal').classList.remove('show');
+        }
+
+        function editTransaction(transactionId) {
+            // Buscar transação existente e preencher o modal
+            const token = localStorage.getItem('token');
+            fetch(`/api/transactions/${transactionId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const transaction = data.data.transaction;
+                    currentEditingId = transactionId;
+                    document.getElementById('modalTitle').textContent = 'Editar Transação';
+                    document.getElementById('transactionId').value = transaction.id;
+                    document.getElementById('description').value = transaction.description;
+                    document.getElementById('amount').value = transaction.amount;
+                    document.getElementById('type').value = transaction.type;
+                    document.getElementById('category').value = transaction.category;
+                    document.getElementById('date').value = transaction.date.split('T')[0];
+                    document.getElementById('transactionModal').classList.add('show');
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao carregar transação:', error);
+                alert('Erro ao carregar transação para edição');
+            });
+        }
+
+        async function deleteTransaction(transactionId) {
+            if (!confirm('Tem certeza que deseja excluir esta transação?')) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`/api/transactions/${transactionId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    loadTransactions(); // Recarregar a lista
+                    alert('Transação excluída com sucesso!');
+                } else {
+                    throw new Error('Erro ao excluir transação');
+                }
+            } catch (error) {
+                console.error('Erro ao excluir transação:', error);
+                alert('Erro ao excluir transação');
+            }
+        }
+
+        document.getElementById('transactionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                description: document.getElementById('description').value,
+                amount: parseFloat(document.getElementById('amount').value),
+                type: document.getElementById('type').value,
+                category: document.getElementById('category').value,
+                date: document.getElementById('date').value
+            };
+
+            try {
+                const token = localStorage.getItem('token');
+                const url = currentEditingId ? `/api/transactions/${currentEditingId}` : '/api/transactions';
+                const method = currentEditingId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    closeTransactionModal();
+                    loadTransactions();
+                    alert(currentEditingId ? 'Transação atualizada com sucesso!' : 'Transação criada com sucesso!');
+                } else {
+                    throw new Error(result.error || 'Erro ao salvar transação');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                alert('Erro ao salvar transação: ' + error.message);
+            }
+        });
+
+        function setupEventListeners() {
+            // Filtros
+            document.getElementById('filterType').addEventListener('change', applyFilters);
+            document.getElementById('filterCategory').addEventListener('change', applyFilters);
+            document.getElementById('filterStartDate').addEventListener('change', applyFilters);
+            document.getElementById('filterEndDate').addEventListener('change', applyFilters);
+        }
+
+        function applyFilters() {
+            // Implementar filtros aqui
+            console.log('Aplicando filtros...');
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('pt-BR');
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'alimentacao': 'fa-utensils',
+                'transporte': 'fa-car',
+                'entretenimento': 'fa-film',
+                'educacao': 'fa-graduation-cap',
+                'saude': 'fa-heart',
+                'moradia': 'fa-home',
+                'salario': 'fa-money-bill-wave',
+                'freelance': 'fa-laptop-code',
+                'investimentos': 'fa-chart-line',
+                'presentes': 'fa-gift'
+            };
+            return icons[category] || 'fa-receipt';
+        }
+
+        // Simular dados para demonstração
+        function simulateData() {
+            const mockTransactions = [
+                {
+                    id: '1',
+                    description: 'Mercado Semanal',
+                    amount: 150.75,
+                    type: 'expense',
+                    category: 'alimentacao',
+                    date: '2024-01-15',
+                    paymentMethod: 'Cartão'
+                },
+                {
+                    id: '2',
+                    description: 'Salário',
+                    amount: 2500.00,
+                    type: 'income',
+                    category: 'salario',
+                    date: '2024-01-05',
+                    paymentMethod: 'Transferência'
+                },
+                {
+                    id: '3',
+                    description: 'Academia',
+                    amount: 89.90,
+                    type: 'expense',
+                    category: 'saude',
+                    date: '2024-01-10',
+                    paymentMethod: 'Débito'
+                }
+            ];
+            
+            displayTransactions(mockTransactions);
+        }
+
+        // Carregar dados simulados se não houver conexão
+        setTimeout(() => {
+            const tableBody = document.getElementById('transactionsTableBody');
+            if (tableBody.children.length === 0) {
+                simulateData();
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

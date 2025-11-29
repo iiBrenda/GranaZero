@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orçamentos - Grana Zero</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #8b5cf6;
+            --secondary: #10b981;
+            --accent: #f59e0b;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --dark: #0f172a;
+            --darker: #020617;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #cbd5e1;
+            --card-bg: rgba(15, 23, 42, 0.8);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glow: 0 0 30px rgba(99, 102, 241, 0.4);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .sidebar-header i {
+            font-size: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sidebar-header span {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-section {
+            margin-bottom: 25px;
+        }
+
+        .nav-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-bottom: 8px;
+        }
+
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: var(--gray-light);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--glass-bg);
+            color: var(--light);
+            transform: translateX(5px);
+        }
+
+        .nav-links a i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .user-profile {
+            margin-top: auto;
+            padding: 15px;
+            background: var(--glass-bg);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--primary-light));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .user-info h4 {
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Conteúdo Principal */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: var(--gray-light);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow);
+        }
+
+        /* Grid de Orçamentos */
+        .budgets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .budget-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .budget-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow), var(--glow);
+        }
+
+        .budget-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .budget-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .budget-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: var(--glass-bg);
+        }
+
+        .budget-info {
+            flex: 1;
+        }
+
+        .budget-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .budget-category {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .budget-progress {
+            margin-bottom: 15px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .progress-value {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .progress-percentage {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--glass-bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .progress-success { background: var(--secondary); }
+        .progress-warning { background: var(--warning); }
+        .progress-danger { background: var(--danger); }
+
+        .budget-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .detail-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .budget-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-icon {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: var(--transition);
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-icon:hover {
+            background: var(--glass-bg);
+            color: var(--light);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 6px;
+        }
+
+        .modal-close:hover {
+            color: var(--light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light);
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 1rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+
+        .btn-secondary {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--light);
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--gray-light);
+        }
+
+        /* Status Colors */
+        .status-on-track { color: var(--secondary); }
+        .status-warning { color: var(--warning); }
+        .status-exceeded { color: var(--danger); }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .budgets-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .budget-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-brain"></i>
+                <span>Grana Zero</span>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Principal</h3>
+                <ul class="nav-links">
+                    <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="transacoes.html"><i class="fas fa-exchange-alt"></i> Transações</a></li>
+                    <li><a href="orcamentos.html" class="active"><i class="fas fa-chart-pie"></i> Orçamentos</a></li>
+                    <li><a href="metas.html"><i class="fas fa-bullseye"></i> Metas</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Análise</h3>
+                <ul class="nav-links">
+                    <li><a href="relatorios.html"><i class="fas fa-chart-line"></i> Relatórios</a></li>
+                    <li><a href="#"><i class="fas fa-chart-bar"></i> Gráficos</a></li>
+                    <li><a href="#"><i class="fas fa-robot"></i> AI Insights</a></li>
+                </ul>
+            </div>
+
+            <div class="nav-section">
+                <h3 class="nav-title">Social</h3>
+                <ul class="nav-links">
+                    <li><a href="amigos.html"><i class="fas fa-users"></i> Amigos</a></li>
+                    <li><a href="#"><i class="fas fa-share-alt"></i> Compartilhar</a></li>
+                    <li><a href="#"><i class="fas fa-trophy"></i> Desafios</a></li>
+                </ul>
+            </div>
+
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h4 id="userName">Usuário</h4>
+                    <p>Ver perfil</p>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Conteúdo Principal -->
+        <main class="main-content">
+            <header class="header">
+                <div class="page-title">
+                    <h1>Orçamentos</h1>
+                    <p>Controle seus gastos por categoria e alcance suas metas</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-primary" onclick="openBudgetModal()">
+                        <i class="fas fa-plus"></i>
+                        Novo Orçamento
+                    </button>
+                </div>
+            </header>
+
+            <!-- Grid de Orçamentos -->
+            <div class="budgets-grid" id="budgetsGrid">
+                <!-- Os orçamentos serão carregados aqui -->
+            </div>
+
+            <!-- Estado Vazio -->
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-chart-pie"></i>
+                <h3>Nenhum orçamento configurado</h3>
+                <p>Comece criando seu primeiro orçamento para controlar seus gastos</p>
+                <button class="btn-primary" onclick="openBudgetModal()" style="margin-top: 15px;">
+                    <i class="fas fa-plus"></i>
+                    Criar Primeiro Orçamento
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Novo Orçamento -->
+    <div class="modal" id="budgetModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeBudgetModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <h3 class="modal-title" id="modalTitle">Novo Orçamento</h3>
+            <form id="budgetForm">
+                <input type="hidden" id="budgetId">
+                <div class="form-group">
+                    <label class="form-label" for="budgetName">Nome do Orçamento</label>
+                    <input type="text" id="budgetName" class="form-input" placeholder="Ex: Alimentação Mensal" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="budgetCategory">Categoria</label>
+                    <select id="budgetCategory" class="form-select" required>
+                        <option value="">Selecione uma categoria...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="budgetAmount">Valor do Orçamento (R$)</label>
+                    <input type="number" id="budgetAmount" class="form-input" step="0.01" placeholder="0.00" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="budgetPeriod">Período</label>
+                    <select id="budgetPeriod" class="form-select" required>
+                        <option value="monthly">Mensal</option>
+                        <option value="weekly">Semanal</option>
+                        <option value="yearly">Anual</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+                <div class="form-group" id="customDates" style="display: none;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div>
+                            <label class="form-label" for="startDate">Data Inicial</label>
+                            <input type="date" id="startDate" class="form-input">
+                        </div>
+                        <div>
+                            <label class="form-label" for="endDate">Data Final</label>
+                            <input type="date" id="endDate" class="form-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="budgetDescription">Descrição (Opcional)</label>
+                    <textarea id="budgetDescription" class="form-input" rows="3" placeholder="Descreva o propósito deste orçamento..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeBudgetModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Orçamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentEditingId = null;
+        let categories = [];
+        let budgets = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuthentication();
+            loadUserData();
+            loadCategories();
+            loadBudgets();
+            setupEventListeners();
+        });
+
+        function checkAuthentication() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        function loadUserData() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user) {
+                document.getElementById('userName').textContent = user.name;
+                document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        }
+
+        async function loadCategories() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch('/api/categories', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    categories = data.data.categories;
+                    populateCategorySelect();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar categorias:', error);
+            }
+        }
+
+        function populateCategorySelect() {
+            const select = document.getElementById('budgetCategory');
+            select.innerHTML = '<option value="">Selecione uma categoria...</option>';
+            
+            categories.forEach(category => {
+                if (category.type === 'expense') { // Apenas categorias de despesa para orçamentos
+                    const option = document.createElement('option');
+                    option.value = category.id;
+                    option.textContent = category.name;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function loadBudgets() {
+            // Carregar orçamentos do localStorage (simulação)
+            const savedBudgets = localStorage.getItem('userBudgets');
+            if (savedBudgets) {
+                budgets = JSON.parse(savedBudgets);
+            }
+            
+            displayBudgets();
+        }
+
+        function displayBudgets() {
+            const grid = document.getElementById('budgetsGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (budgets.length === 0) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            grid.innerHTML = '';
+
+            budgets.forEach(budget => {
+                const category = categories.find(c => c.id === budget.category);
+                const spent = calculateSpentAmount(budget);
+                const percentage = (spent / budget.amount) * 100;
+                const status = getBudgetStatus(percentage);
+                
+                const card = document.createElement('div');
+                card.className = 'budget-card';
+                
+                card.innerHTML = `
+                    <div class="budget-header">
+                        <div class="budget-icon" style="background: ${category?.color || '#6366f1'}20; color: ${category?.color || '#6366f1'}">
+                            <i class="fas ${getCategoryIcon(budget.category)}"></i>
+                        </div>
+                        <div class="budget-info">
+                            <div class="budget-title">${budget.name}</div>
+                            <div class="budget-category">${category?.name || budget.category}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="budget-progress">
+                        <div class="progress-info">
+                            <div class="progress-value">R$ ${spent.toFixed(2)} / R$ ${budget.amount.toFixed(2)}</div>
+                            <div class="progress-percentage ${getStatusClass(status)}">${percentage.toFixed(1)}%</div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${getProgressClass(status)}" style="width: ${Math.min(percentage, 100)}%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="budget-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Restante</div>
+                            <div class="detail-value">R$ ${Math.max(0, budget.amount - spent).toFixed(2)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Período</div>
+                            <div class="detail-value">${getPeriodText(budget.period)}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="budget-actions">
+                        <button class="btn-icon" onclick="editBudget('${budget.id}')">
+                            <i class="fas fa-edit"></i>
+                            Editar
+                        </button>
+                        <button class="btn-icon" onclick="deleteBudget('${budget.id}')">
+                            <i class="fas fa-trash"></i>
+                            Excluir
+                        </button>
+                    </div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function calculateSpentAmount(budget) {
+            // Simular cálculo de gastos (em um sistema real, isso viria do backend)
+            const transactions = JSON.parse(localStorage.getItem('userTransactions') || '[]');
+            const categoryTransactions = transactions.filter(t => 
+                t.category === budget.category && 
+                t.type === 'expense'
+            );
+            
+            return categoryTransactions.reduce((total, t) => total + t.amount, 0);
+        }
+
+        function getBudgetStatus(percentage) {
+            if (percentage <= 75) return 'on-track';
+            if (percentage <= 90) return 'warning';
+            return 'exceeded';
+        }
+
+        function getStatusClass(status) {
+            return `status-${status}`;
+        }
+
+        function getProgressClass(status) {
+            return `progress-${status}`;
+        }
+
+        function getPeriodText(period) {
+            const periods = {
+                'monthly': 'Mensal',
+                'weekly': 'Semanal',
+                'yearly': 'Anual',
+                'custom': 'Personalizado'
+            };
+            return periods[period] || period;
+        }
+
+        function openBudgetModal() {
+            currentEditingId = null;
+            document.getElementById('modalTitle').textContent = 'Novo Orçamento';
+            document.getElementById('budgetForm').reset();
+            document.getElementById('budgetModal').classList.add('show');
+        }
+
+        function closeBudgetModal() {
+            document.getElementById('budgetModal').classList.remove('show');
+        }
+
+        function editBudget(budgetId) {
+            const budget = budgets.find(b => b.id === budgetId);
+            if (budget) {
+                currentEditingId = budgetId;
+                document.getElementById('modalTitle').textContent = 'Editar Orçamento';
+                document.getElementById('budgetId').value = budget.id;
+                document.getElementById('budgetName').value = budget.name;
+                document.getElementById('budgetCategory').value = budget.category;
+                document.getElementById('budgetAmount').value = budget.amount;
+                document.getElementById('budgetPeriod').value = budget.period;
+                document.getElementById('budgetDescription').value = budget.description || '';
+                
+                if (budget.period === 'custom') {
+                    document.getElementById('customDates').style.display = 'block';
+                    document.getElementById('startDate').value = budget.startDate;
+                    document.getElementById('endDate').value = budget.endDate;
+                }
+                
+                document.getElementById('budgetModal').classList.add('show');
+            }
+        }
+
+        function deleteBudget(budgetId) {
+            if (!confirm('Tem certeza que deseja excluir este orçamento?')) {
+                return;
+            }
+
+            budgets = budgets.filter(b => b.id !== budgetId);
+            saveBudgets();
+            displayBudgets();
+            alert('Orçamento excluído com sucesso!');
+        }
+
+        function saveBudgets() {
+            localStorage.setItem('userBudgets', JSON.stringify(budgets));
+        }
+
+        document.getElementById('budgetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('budgetName').value,
+                category: document.getElementById('budgetCategory').value,
+                amount: parseFloat(document.getElementById('budgetAmount').value),
+                period: document.getElementById('budgetPeriod').value,
+                description: document.getElementById('budgetDescription').value
+            };
+
+            if (formData.period === 'custom') {
+                formData.startDate = document.getElementById('startDate').value;
+                formData.endDate = document.getElementById('endDate').value;
+            }
+
+            if (currentEditingId) {
+                // Editar orçamento existente
+                const index = budgets.findIndex(b => b.id === currentEditingId);
+                if (index !== -1) {
+                    budgets[index] = { ...budgets[index], ...formData };
+                }
+            } else {
+                // Criar novo orçamento
+                const newBudget = {
+                    id: 'budget_' + Date.now(),
+                    ...formData,
+                    createdAt: new Date().toISOString()
+                };
+                budgets.push(newBudget);
+            }
+
+            saveBudgets();
+            closeBudgetModal();
+            displayBudgets();
+            
+            alert(currentEditingId ? 'Orçamento atualizado com sucesso!' : 'Orçamento criado com sucesso!');
+        });
+
+        function setupEventListeners() {
+            // Mostrar/ocultar datas personalizadas
+            document.getElementById('budgetPeriod').addEventListener('change', function() {
+                const customDates = document.getElementById('customDates');
+                customDates.style.display = this.value === 'custom' ? 'block' : 'none';
+            });
+        }
+
+        function getCategoryIcon(category) {
+            const icons = {
+                'alimentacao': 'fa-utensils',
+                'transporte': 'fa-car',
+                'entretenimento': 'fa-film',
+                'educacao': 'fa-graduation-cap',
+                'saude': 'fa-heart',
+                'moradia': 'fa-home',
+                'salario': 'fa-money-bill-wave',
+                'freelance': 'fa-laptop-code',
+                'investimentos': 'fa-chart-line',
+                'presentes': 'fa-gift'
+            };
+            return icons[category] || 'fa-chart-pie';
+        }
+
+        // Simular dados para demonstração
+        function simulateData() {
+            if (budgets.length === 0) {
+                budgets = [
+                    {
+                        id: 'budget_1',
+                        name: 'Alimentação Mensal',
+                        category: 'alimentacao',
+                        amount: 600,
+                        period: 'monthly',
+                        description: 'Gastos com supermercado e restaurantes'
+                    },
+                    {
+                        id: 'budget_2',
+                        name: 'Transporte',
+                        category: 'transporte',
+                        amount: 300,
+                        period: 'monthly',
+                        description: 'Combustível e transporte público'
+                    },
+                    {
+                        id: 'budget_3',
+                        name: 'Entretenimento',
+                        category: 'entretenimento',
+                        amount: 200,
+                        period: 'monthly',
+                        description: 'Cinema, streaming e lazer'
+                    }
+                ];
+                saveBudgets();
+                displayBudgets();
+            }
+        }
+
+        // Carregar dados simulados
+        setTimeout(simulateData, 1000);
+    </script>
+</body>
+</html>

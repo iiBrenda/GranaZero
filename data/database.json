@@ -1,0 +1,137 @@
+{
+  "users": [
+    {
+      "id": "0bc46fcd-2e08-4e40-a078-303c0f0def22",
+      "name": "Brendux Maria a",
+      "email": "cavalcante.brendam@gmail.com",
+      "password": "$2b$12$S7CRvb9GC0rTeueUlXB/n.MEAvxLoL4JYswOjxSt4BwwAfaxCncny",
+      "studentInfo": {},
+      "createdAt": "2025-11-29T00:59:23.703Z",
+      "lastLogin": "2025-11-29T02:04:25.400Z",
+      "isVerified": false,
+      "preferences": {
+        "currency": "BRL",
+        "theme": "dark",
+        "notifications": true,
+        "language": "pt-BR"
+      },
+      "stats": {
+        "totalTransactions": 1,
+        "totalSaved": 0,
+        "streak": 4
+      }
+    },
+    {
+      "id": "680c075a-e66f-4ca5-af24-1255834d4067",
+      "name": "Brendux Maria a",
+      "email": "aaa@gmail.com",
+      "password": "$2b$12$yDe7mUzf35vDyxDSe8k8cuhR9Tcq.ZHphdbBeGWBZXnMwJWcq1Liu",
+      "studentInfo": {},
+      "createdAt": "2025-11-29T01:10:07.720Z",
+      "lastLogin": "2025-11-29T01:10:07.720Z",
+      "isVerified": false,
+      "preferences": {
+        "currency": "BRL",
+        "theme": "dark",
+        "notifications": true,
+        "language": "pt-BR"
+      },
+      "stats": {
+        "totalTransactions": 0,
+        "totalSaved": 0,
+        "streak": 0
+      }
+    }
+  ],
+  "transactions": [
+    {
+      "id": "ca448ee2-dcf0-4e00-84f8-c5e06e414ecb",
+      "userId": "0bc46fcd-2e08-4e40-a078-303c0f0def22",
+      "description": "almoço",
+      "amount": 26.76,
+      "type": "expense",
+      "category": "alimentacao",
+      "date": "2025-11-29T00:00:00.000Z",
+      "paymentMethod": "outros",
+      "tags": [],
+      "createdAt": "2025-11-29T01:44:56.337Z",
+      "updatedAt": "2025-11-29T01:44:56.337Z"
+    }
+  ],
+  "friendRequests": [],
+  "friendships": [],
+  "aiInsights": [],
+  "financialGoals": [],
+  "categories": [
+    {
+      "id": "alimentacao",
+      "name": "Alimentação",
+      "type": "expense",
+      "color": "#f59e0b",
+      "icon": "utensils"
+    },
+    {
+      "id": "transporte",
+      "name": "Transporte",
+      "type": "expense",
+      "color": "#3b82f6",
+      "icon": "car"
+    },
+    {
+      "id": "entretenimento",
+      "name": "Entretenimento",
+      "type": "expense",
+      "color": "#ec4899",
+      "icon": "film"
+    },
+    {
+      "id": "educacao",
+      "name": "Educação",
+      "type": "expense",
+      "color": "#10b981",
+      "icon": "graduation-cap"
+    },
+    {
+      "id": "saude",
+      "name": "Saúde",
+      "type": "expense",
+      "color": "#ef4444",
+      "icon": "heart"
+    },
+    {
+      "id": "moradia",
+      "name": "Moradia",
+      "type": "expense",
+      "color": "#8b5cf6",
+      "icon": "home"
+    },
+    {
+      "id": "salario",
+      "name": "Salário",
+      "type": "income",
+      "color": "#10b981",
+      "icon": "money-bill-wave"
+    },
+    {
+      "id": "freelance",
+      "name": "Freelance",
+      "type": "income",
+      "color": "#6366f1",
+      "icon": "laptop-code"
+    },
+    {
+      "id": "investimentos",
+      "name": "Investimentos",
+      "type": "income",
+      "color": "#06b6d4",
+      "icon": "chart-line"
+    },
+    {
+      "id": "presentes",
+      "name": "Presentes",
+      "type": "income",
+      "color": "#d946ef",
+      "icon": "gift"
+    }
+  ]
+}
